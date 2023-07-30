@@ -1,5 +1,7 @@
 "use strict"
-/////////////////// GAME GLOBAL VERIABLES //////////////////////////
+var scene = window.scene;
+/////////////////// COLORS & ROTATIONS //////////////////////////
+///colors and rotations vectors
 const baseColor = new BABYLON.Color3(0.54, 0.13, 0.54)
 const notSelectedColor = new BABYLON.Color3(1, 0, 1);//pink
 const selectedColor = new BABYLON.Color3(1, 1, 0);//yellow
@@ -7,6 +9,7 @@ const blueColor = new BABYLON.Color3(0, 0, 1);
 const redColor = new BABYLON.Color3(1, 0, 0);
 const blackColor = new BABYLON.Color3(0, 0, 0);
 const greenColor = new BABYLON.Color3(0, 1, 0);
+
 const rotationO = new BABYLON.Vector3(0, 0, 0);//only for model
 const rotationX = new BABYLON.Vector3(1.5708, 0, 0);
 const rotationY = new BABYLON.Vector3(0, 1.5708, 0);
@@ -21,7 +24,7 @@ const colorsObj = [
     { "colorName": "selected", "colorVector": selectedColor },
     { "colorName": "notSelected", "colorVector": notSelectedColor }
 ];
-var scene = window.scene;
+
 function rotationVector2Name(vector) {
     if (vector.y > 0) { return "Y" };
     if (vector.z > 0) { return "Z" };
@@ -52,6 +55,7 @@ function colorName2Vector(theColorName) {
 function colorVector2Name(theColorVector) {
     return colorsObj.filter(c => c.colorVector == theColorVector)[0].colorName;
 }
+/////////////////// end COLORS & ROTATIONS //////////////////////////
 
 ///we can't use split(".") because we have: b2.p-0.5
 function fullName2Private(theFullName) {
@@ -59,13 +63,14 @@ function fullName2Private(theFullName) {
     return theFullName.substr(firstDot);
 }
 
-const tableURL = 'https://9ewp86ps3e.execute-api.us-east-1.amazonaws.com/development/model';
-const usersURL = 'https://9ewp86ps3e.execute-api.us-east-1.amazonaws.com/development/users';
+//const tableURL = 'https://9ewp86ps3e.execute-api.us-east-1.amazonaws.com/development/model';
+//const usersURL = 'https://9ewp86ps3e.execute-api.us-east-1.amazonaws.com/development/users';
 let selectedConnection;///the sphere that was clicked on one of the elements outside the model
+///////////////////end  MODELS & MENU //////////////////////////
 let modelsArray = [];
 let currentModel;///returned by createModel that push it into modelsArray
 let elementsMenu;///the parent of the blocks that user can select
-let currentWorld;///to be returned by setWorld (that call chgangeSky)
+//let currentWorld;///to be returned by setWorld (that call chgangeSky)
 
 ///modelLabel is like "M1". used in the arry of jumps
 ///(differ then metadat.modelName wjich is the object for the label)
@@ -79,7 +84,8 @@ function getModel(modelLabel) {
     //console.log(modelsArray);
     return modelsArray.filter(x => x.metadata.modelTitle == modelLabel)[0];
 }
-/////////////////// GAME FUNCTIONS //////////////////////////
+
+///////////////////end  MODELS & MENU //////////////////////////
 
 ///move block and connect it to model
 function animate(box, oldPos, newPos, scene) {
@@ -147,6 +153,7 @@ function setVisibleModel(theMesh, setItVisible) {
 }
 
 function createNearMenu(mode) {
+    /*
     const manager = new BABYLON.GUI.GUI3DManager(scene);
     let near = new BABYLON.GUI.NearMenu("near");
     manager.addControl(near);
@@ -189,14 +196,12 @@ function createNearMenu(mode) {
     }
     ///near.scaling - new BABYLON.Vector3(0.6,0.6,0.6);///not working?
     return near;
+    */
 }
 
 function createModel(theModelName, theModelTitle, x, y, z) {
     var pos = new BABYLON.Vector3(x, y, z);
     let model = meshBlock(scene, 1);
-    //model.getChildMeshes(false)[1].dispose();
-    //model.position.x = -5;
-    //model.position.z = -5;
     model.position = pos;
     model.metadata = {
         inModel: true,
@@ -214,7 +219,6 @@ function createModel(theModelName, theModelTitle, x, y, z) {
 
 function disposeModels() {
     for (let index = modelsArray.length-1; index > -1; index--) {
-        //let element = modelsArray[index];
         let element = modelsArray.pop();
         element.metadata.labelObj.dispose();
         element.dispose();
@@ -257,7 +261,6 @@ function removeLastBlock() {
     ///if user click another model before he click delete we dont want to delete feom wrong 
     if (currentSession ) {
         let modelLabel = currentSession.modelInConnectedStage[currentSession.connectedStage];
-        
     }
 
     let lastBlockNum = currentModel.metadata.numOfBlocks;
@@ -333,27 +336,16 @@ function connect() {
     let newColor = selectedConnection.parent.material.diffuseColor;
     let selectedConnectionName = selectedConnection.name;
     doConnect(newElement, newColor, selectedConnectionName, true);///has to be true
-    /* ///moved to add2model in animate
-    if (currentSession) {
-        currentSession.reportConnect(newElement);///newElement has connectedTo object
-    }
-    */
 }
 
+//////////////// WORLDS //////////////
 ///run on all models in modelsArray. if value of worldByModel[theModel] is world show the model
 ///model.metadata.modelTitle is the text on the model. model.metadata.labelObj is the object for label
 function visibleModelsByWorld(world) {
-    //console.log ("modelsArray");
-    //console.log (modelsArray);
     modelsArray.forEach(model => {
         let modelLabel = model.metadata.modelTitle;
-        //console.log ("model: " + model);
-        //console.log ("modelLabel: " + modelLabel);
-        //console.log ("world: " + world);
-        //console.log (currentSession.worldByModel[modelLabel])
-        setVisibleModel(model, (currentSession.worldByModel[modelLabel] == world));
+       setVisibleModel(model, (currentSession.worldByModel[modelLabel] == world));
     });
-
 }
 
 
@@ -382,7 +374,7 @@ function setWorld(worldName) {
     }
     visibleModelsByWorld(currentWorld);///show/hide relevent models
 }
-
+////////////////end WORLDS //////////////
 function changeSky(skyPath, groundColorName) {
     var skybox = scene.getMeshByName("skyBox");
 
@@ -401,12 +393,7 @@ function changeSky(skyPath, groundColorName) {
 
 
 async function saveModel() {
-    //messageBox.fbMode();
-    //messageBox.showMessage("בוקר מאד טוב\nלכולם בארץ");
-    //changeSky("textures/blue", colorName2Vector("blue"));
-    //saveUserAction();
-
-    //return;///temporary to avoid some one from removing my model
+     //return;///temporary to avoid some one from removing my model
 
     let childs = currentModel.getChildMeshes(true);
     let name = currentModel.metadata.modelName;
@@ -581,59 +568,7 @@ function doConnect(newElement, newColor, selectedConnectionMame, toAnimate) {
     setModelSelectedConnection(currentModel, null);
     
 }
-/*
-function arrange4Connect(newElement, newColor, selectedConnectionMame) {
-    
-    let newElementConnection;
-    ///set any of its childrens with its own matirial and action
-    let children = newElement.getChildren();
-    for (let index = 0; index < children.length; index++) {
-        const element = children[index];
-        initMeshContactSphere(element);
-        ///element.name is like b33.p-1 while selectedConnectionMame is like p-1 without prefix
-        if (fullName2Private(element.name) == selectedConnectionMame) {
-            newElementConnection = element;
-        }
-    }
-    newElement.material = new BABYLON.StandardMaterial("myMaterial", scene);
-    newElement.material.diffuseColor = newColor;
-    ///calculate the vector between the selected spheres in the new element and in the model
-    const matrix_sc = newElementConnection.parent.computeWorldMatrix(true);
-    var global_pos_sc = BABYLON.Vector3.TransformCoordinates(newElementConnection.position, matrix_sc);
-    const matrix_m = getModelSelectedConnection(currentModel).parent.computeWorldMatrix(true);
-    var global_pos_m = BABYLON.Vector3.TransformCoordinates(getModelSelectedConnection(currentModel).position, matrix_m);
-    var global_delta = global_pos_m.subtract(global_pos_sc);
-    return global_delta;
-}
-////TODO: we neeed to transfer newElementConnection from arrange4Connect  to moveConnect
-function moveConnect(newElement, toAnimate, global_delta) {
-    ///move the elment by the calaculated vector, then add it to model
-    newElement.setParent(null);
-    let oldPos = newElement.position;//BABYLON.Vector3.TransformCoordinates(newElement.position, matrix_m);   
-    let newPos = oldPos.add(global_delta);
-    if (toAnimate) {
-        animate(newElement, oldPos, newPos, scene); ///will setParent from inside when animation done   
-    } else {
-        newElement.position = newPos;
-        newElement.setParent(currentModel);
-        setOnGround(currentModel, 1);
-    }
-    //////
 
-    newElement.metadata = {
-        inModel: true,
-        blockNum: currentModel.metadata.numOfBlocks + 1,
-        connection: newElementConnection.name, //selectedConnection, name of the selected sphere in the new block
-        connectedTo: getModelSelectedConnection(currentModel).name, ///name of the selected sphere in the model
-        destBlock: getModelSelectedConnection(currentModel).parent.metadata.blockNum //number of the selected block in the model
-    };
-    currentModel.metadata.numOfBlocks = currentModel.metadata.numOfBlocks + 1;
-    let sc = getModelSelectedConnection(currentModel)
-    sc.scaling = new BABYLON.Vector3(0.9, 0.9, 0.9);
-    sc.material.diffuseColor = notSelectedColor;
-    setModelSelectedConnection(currentModel, null);
-}
-*/
 ///turn the elemets not in use button that call it is not visible
 function flipModel() {
     if (!currentModel) { /// we are on instructions before setting model

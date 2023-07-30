@@ -14,7 +14,7 @@ class Messages {
         this.plane.position.z = -25;
         this.plane.position.y = 2;/////2
         this.plane.position.x = 0;
-        this.plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;///without iא its mirror
+        this.plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;///without it its mirror
 
         this.textField = new BABYLON.GUI.TextBlock("upperText");
 
@@ -42,17 +42,13 @@ class Messages {
         text1.top = "-300px";
         text1.height = "600px"
         this.advancedTexture.addControl(text1);
-
-        //this.advancedTexture.focusedControl = inputTextArea;///create bug
-        //plane.isVisible = true;
-        //plane.dispose();
-
     }
 
     ///switch screens by currentScreen. convention:
     /// use function show<CurrentScreen> to show the new screen
     /// use function done<CurrentScreen> if the screen need dispose objects or implemnt user data
     screenDone() {
+        /*
         switch (this.currentScreen) {
             case "init":
                 //this.showPic();/////
@@ -89,17 +85,17 @@ class Messages {
                 this.showGroupIstructions();
                 break;
             case "GroupIstructions":
-                //this.showGroupIstructions();
+                
                 this.showConnect();
                 this.currentScreen = "end";
                 break;
             case "examA":
-                //this.showConnect();
+                
                 currentSession.initExamA();
                 this.nextButton.isEnabled = false;
                 break;
             case "examB":
-                //this.showConnect();
+                
                 currentSession.initExamB();
                 this.nextButton.isEnabled = false;
                 break;
@@ -107,6 +103,7 @@ class Messages {
                 console.log("default: " + this.currentScreen);
                 break;
         }
+        */
     }
 
     showPic() {

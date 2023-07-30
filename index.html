@@ -24,7 +24,7 @@
     <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
 
     <script src="lego1.js"></script>
-    <script src="students.js"></script>
+    <!--script src="students.js"></script-->
     <script src="messages.js"></script>
     <style>
         html,
@@ -119,7 +119,7 @@
             ///END LIGHT///
 
             ///SKYBOX///
-            let startSkyFiles = "textures/pink";
+            let startSkyFiles = "textures/red";
             const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, scene);
             const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
             skyboxMaterial.backFaceCulling = false;
@@ -142,7 +142,7 @@
             var environment = scene.createDefaultEnvironment({ createGround: false, skyboxSize: 1000 });////V
             environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"));
 
-            ///ELEMENTS MENU///
+            /*//ELEMENTS MENU///
             elementsMenu = BABYLON.MeshBuilder.CreateSphere("elementsMenu", { diameter: 0.01 });
             
             elementsMenu.position.x = menuX;
@@ -168,27 +168,9 @@
             c1.position.x = 6;
             
             elementsMenu.scaling = scailingMenuModel;
-            ///end ELEMENTS MENU///
+            *///end ELEMENTS MENU///
 
-            ///MODEL///
-            //currentModel = createModel("one", -5, 0 ,-5 );
-            ///end MODEL///
-
-            ///NEAR MENU///
-            //near = createNearMenu();///called now from messages. implemented in lego 1
-             
-            ///end NEAR MENU///
-/*////////////////////
-var newPlane = BABYLON.Mesh.CreatePlane("plane", 10);
-  //newPlane.position.y = 1;
-  newPlane.position.z = -25;
-        newPlane.position.y = 2;/////2
-        newPlane.position.x = 0;
-  var newADT = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(newPlane);
-  var newImage = new BABYLON.GUI.Image("erji", "textures/pink_py.png");
-  newADT.addControl(newImage);
-*////////////////////
-            messageBox = new Messages();
+            ///messageBox = new Messages();
 
             const xr = scene.createDefaultXRExperienceAsync({
                 floorMeshes: [ground]
