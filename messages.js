@@ -6,14 +6,14 @@ var currentFbMessage = null;
 
 class Messages {
 
-    plane = BABYLON.Mesh.CreatePlane("plane", 10);
+    plane = BABYLON.Mesh.CreatePlane("plane", 3);
     advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(this.plane);
     currentScreen = "init";
     nextButton;
     constructor() {
-        this.plane.position.z = -25;
-        this.plane.position.y = 2;/////2
-        this.plane.position.x = 0;
+        this.plane.position.z = 1;////-25
+        this.plane.position.y = 3;/////2
+        this.plane.position.x = 5;
         this.plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;///without it its mirror
 
         this.textField = new BABYLON.GUI.TextBlock("upperText");
@@ -21,27 +21,51 @@ class Messages {
         this.advancedTexture.background = 'green'
 
 
-        this.nextButton = BABYLON.GUI.Button.CreateSimpleButton("but1", "המשך");
+        this.nextButton = BABYLON.GUI.Button.CreateSimpleButton("but1", "אשר");
         this.nextButton.width = 1;
         this.nextButton.height = 0.4;
         this.nextButton.color = "white";
         this.nextButton.fontSize = 50;
         this.nextButton.background = "green";
         this.nextButton.onPointerUpObservable.add(this.screenDone.bind(this));
-        this.nextButton.top = "90px";//90
+        this.nextButton.top = "400px";//90
         this.nextButton.left = "10px";
         this.nextButton.height = "70px";
         this.advancedTexture.addControl(this.nextButton);
         
 
-        const initialText = "במסך זה יופיעו הנחיות\n\n מאחוריך מספר לבנים לבניית המודל\n\n[אחרי שראינו את האבנים יש להקליק על כפתור [המשך\nהקלקה פרושה להצביע עם הקרן על הכפתור וללחוץ על ההדק";
+        const initialText = "יש לבחור מספר";
         let text1 = this.textField;
         text1.text = initialText;//"Hello world";
         text1.color = "white"//"red";
-        text1.fontSize = 36;
+        text1.fontSize = 76;
         text1.top = "-300px";
-        text1.height = "600px"
+        text1.height = "100px"
         this.advancedTexture.addControl(text1);
+
+        let inputTextArea = new BABYLON.GUI.InputText('id', "");
+        inputTextArea.height = "40px";
+        inputTextArea.color = "white";
+        inputTextArea.fontSize = 48;
+        inputTextArea.top = "-120px";
+        inputTextArea.height = "70px";
+        inputTextArea.width = "200px";
+        inputTextArea.onTextChangedObservable.add(() => this.nextButton.isEnabled = true);
+        this.advancedTexture.addControl(inputTextArea);
+
+        const keyboard = new BABYLON.GUI.VirtualKeyboard("vkb");
+        keyboard.addKeysRow(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        //keyboard.connect(inputTextArea);
+        keyboard.isVisible = true;
+        keyboard.top = "-10px";
+        keyboard.scaleY = 3;
+        keyboard.scaleX = 2;
+        keyboard.onKeyPressObservable.add(function (key) {
+            console.log (key);
+            const b1X5 = meshBlock(scene, key);
+        })
+        //keyboard.left = "10px";
+        this.advancedTexture.addControl(keyboard);
     }
 
     ///switch screens by currentScreen. convention:
@@ -117,7 +141,7 @@ class Messages {
         this.advancedTexture.addControl(image);
         console.log("image.top: " + image.top)
     }
-
+/*
     showEditID() {
         this.currentScreen = "editID";
         this.textField.text = "יש להקליק בתוך השדה השחור. תופיע מקלדת\nיש לקליק בה את המספר שקבלת ממנהלת הניסוי"
@@ -336,6 +360,7 @@ class Messages {
                 break;
         }
     }
+    */
 }
 
 class FbMessages {

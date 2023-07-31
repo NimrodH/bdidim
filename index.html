@@ -23,7 +23,7 @@
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
 
-    <script src="lego1.js"></script>
+    <script src="bdidim1.js"></script>///lego1.js
     <!--script src="students.js"></script-->
     <script src="messages.js"></script>
     <style>
@@ -107,7 +107,7 @@
             ///CAMERA///
             ///////const camera = new BABYLON.ArcRotateCamera("Camera", - Math.PI / 2, Math.PI / 2, 1, BABYLON.Vector3.Zero());///used only for taking pics
             var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -7), scene);///used for VR
-            camera.setTarget(new BABYLON.Vector3(0, 4, -15));///used for VR
+            camera.setTarget(new BABYLON.Vector3(0, 4, 0));///used for VR ////was(0, 4, -15)
             camera.attachControl(canvas, true);///used always
             ///end camera///
 
@@ -170,7 +170,7 @@
             elementsMenu.scaling = scailingMenuModel;
             *///end ELEMENTS MENU///
 
-            ///messageBox = new Messages();
+            messageBox = new Messages();
 
             const xr = scene.createDefaultXRExperienceAsync({
                 floorMeshes: [ground]
